@@ -26,7 +26,7 @@ func HandleError(w http.ResponseWriter, statusCode int, message string) {
 		IsError:   true,
 		ErrorCode: statusCode,
 	}
-	renderTemplate(w, "layout/error", "page/error", data)
+	lib.RenderTemplate(w, "layout/error", "page/error", data)
 }
 
 // WithErrorHandling middleware that handles all errors and panics
@@ -62,6 +62,9 @@ func WithErrorHandling(next http.Handler) http.Handler {
 					case "too many request":
 						statusCode = http.StatusTooManyRequests
 						message = "Too Many Request"
+					case "see other":
+						statusCode = http.StatusSeeOther
+						message = "See Other"
 					default:
 						// fmt.Println(">>>>>>>>>>STRING:Internal<<<<<<<<<<")
 						statusCode = http.StatusInternalServerError

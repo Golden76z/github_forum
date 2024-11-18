@@ -4,25 +4,29 @@
   <h3>Account created the: {{ .CreationDate }} at: {{ .CreationHour }}</h3>
   <h3>Your role: {{ .Role }}</h3>
   
-
   {{if eq .Role "Admin"}}
-    <p>Test: admin</p>
-    {{end}}
-    
-    <h3>List of Users:</h3>
-    <ul>
-      {{ range .AllUsers }}
-        <li>
-          Username: {{ .Username }}, Email: {{ .Email }}, Role: {{ .Role }} 
-        </li>
-    </ul>
+  {{template "block/admin/users" .}}
+  {{template "block/admin/categories" .}}
   {{end}}
-  
+  {{if eq .Role "User" }}
+  <ul>
+    <li>
+      Username: {{ .Username }}, Email: {{ .Email }}, Role: {{ .Role }}
+      <form method="POST" action="/admin/delete-user">
+        <input type="hidden" name="userUUID" value="{{ .UUID }}">
+        <button type="submit">Delete my account</button>
+      </form>
+    </li>
+  </ul>
+  {{end}}
+
   {{ range .Posts }}
   <div class="post">
     <h3>Post Title: {{ .Title }}, Category: {{ .Category_ID }}</h3>
     <p>Post text: {{ .Text }}</p>
+    <!-- todo modify the date -->
     <p>Created at: {{ .CreatedAt }}</p>
   </div>
-  {{ end }}
+  {{end}}
+
 {{end}}
